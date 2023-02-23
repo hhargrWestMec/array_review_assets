@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title> Student List </title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            background-image: linear-gradient(to bottom right, #7b54c9, #eca18c);
+            background-repeat: no-repeat;
+            height: 220vh;
+        }
+
+        .mainContainer {
+            width: 75%;
+            margin-left: 12.5%;
+            background-color: grey;
+            height: fit-content;
+            margin-top: 5%;
+            border-radius: 10px;
+            padding-bottom: 2.5%;
+        }
+
+        .topBarContainer {
+            width: 90%;
+            margin: 5%;
+            height: 12.5%;
+            display: flex;
+            align-items: center;
+            flex-direction: column;
+            justify-content: center;
+            border-bottom: 5px solid #7b54c9;
+        }
+        
+        .topBarContainer h1 {
+            font-size: 10vh;
+            color: white;
+            text-shadow: 5px 5px 10px #7b54c9, 1px 1px black;
+        }
+
+        .topBarContainer select {
+            font-size: 2vh;
+            padding: 1%;
+        }
+
+        .peopleListContainer {
+            width: 90%;
+            margin: 5%;
+            height: 80%;
+        }
+
+        .peopleListContainer table {
+            width: 100%;
+            text-align: center;
+            border: 3px solid black;
+            border-radius: 10px;
+        }
+
+        .peopleListContainer table th {
+            font-size: 4vh;
+            padding: 2%;
+        }
+
+        .peopleListContainer table td {
+            font-size: 3vh;
+            padding: 1.25%;
+        }
+
+        .col1 {
+            width: 60%;
+            
+        }
+
+        .col2 {
+            width: 20%;
+        }
+
+        .col3 {
+            width: 20%;
+        }
+
+
+
+    </style>
+</head>
+<body>
+
+    <div class="mainContainer">
+        <div class="topBarContainer">
+
+            <h1>Student List</h1>
+
+            <select name="filter" id="filter" onchange="filter()">
+                <option value="no_filter">No Filter</option>
+                <option value="junior">Junior</option>
+                <option value="senior">Senior</option>
+                <option value="male">Male</option>
+                <option value="female">Female</option>
+            </select>
+        </div>
+
+        <div class="peopleListContainer">
+            <table id="mainList">
+                <tr>
+                    <th class="col1"> Name </th>
+                    <th class="col2"> Gender </th>
+                    <th class="col3"> Year </th>
+                </tr>
+            </table>
+        </div>
+    
+
+    </div>
+
+    
+
+    <script>
+
+        class Names {
+            constructor (name, gender, year) {
+                this.name = name,
+                this.gender = gender,
+                this.year = year
+            }
+
+        }
+
+        const nameList = [
+            new Names("Hayden", "Male", "Junior"),
+            new Names("Nathan", "Male", "Junior"),
+            new Names("Jaden", "Male", "Junior"),
+            new Names("Ethan", "Male", "Junior"),
+            new Names("Shane", "Male", "Junior"),
+            new Names("Gaby", "Female", "Junior")
+        ]
+
+
+        function create (person) {
+            const main = document.getElementById('mainList');
+
+            let row = document.createElement('tr');
+            let td1 = document.createElement('td');
+            let td2 = document.createElement('td');
+            let td3 = document.createElement('td');
+
+            td1.className = 'col1';
+            td2.className = 'col2';
+            td3.className = 'col3';
+
+            td1.innerText = person.name;
+            td2.innerText = person.gender;
+            td3.innerText = person.year;
+
+            row.append(td1);
+            row.append(td2);
+            row.append(td3);
+
+            main.append(row)
+        }
+
+
+        function filter () {
+            const filter = document.getElementById('filter').value;
+            clearTable();
+
+            let filteredArray = [];
+
+            if ( filter == 'no_filter' ) {
+                filteredArray = nameList;
+            } else if ( filter == 'junior' ) {
+                filteredArray = nameList.filter(juniorFilter);
+            } else if ( filter == 'senior') {
+                filteredArray = nameList.filter(seniorFilter);
+            } else if ( filter == 'male' ) {
+                filteredArray = nameList.filter(maleFilter);
+            } else if ( filter == 'female') {
+                filteredArray = nameList.filter(femaleFilter);
+            } else {
+                window.alert("An error has occurred! Please try again!")
+            }
+
+            for ( let i = 0; i < filteredArray.length; i++ ) {
+                create(filteredArray[i]);
+            }  
+        }
+
+        function femaleFilter (person) {
+            return person.gender == "Female"
+        }
+        
+        function maleFilter (person) {
+            return person.gender == "Male"
+        }
+        
+        function juniorFilter (person) {
+            return person.year == "Junior"
+        }
+        
+        function seniorFilter (person) {
+            return person.year == "Senior"
+        }
+
+
+
+        function clearTable () {
+            const rows = document.getElementsByTagName('tr');
+            const table = document.getElementById('mainList');
+            const length = rows.length;
+            
+            for ( let i = 1; i < length; i++ ) {
+                table.children[1].remove();
+            }
+        }
+
+        filter()
+
+    </script>
+</body>
+</html>
